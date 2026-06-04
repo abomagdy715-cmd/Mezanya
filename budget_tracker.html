@@ -1,0 +1,302 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);direction:rtl;background:var(--color-background-tertiary)}
+
+.app{max-width:400px;margin:0 auto;padding:14px}
+
+.header{padding:20px 18px 18px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.header-title{font-size:13px;font-weight:500;color:var(--color-text-secondary)}
+.month-pill{font-size:11px;padding:3px 10px;border-radius:99px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+.big-num{font-size:36px;font-weight:500;color:var(--color-text-primary);line-height:1;margin-bottom:4px}
+.big-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:16px}
+.meter-bg{height:5px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.meter-fill{height:100%;border-radius:99px;background:#3B6D11;transition:width .4s}
+.meter-fill.over{background:#A32D2D}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.stat-l{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.stat-v{font-size:16px;font-weight:500}
+.inc-c{color:#27500A}.exp-c{color:#791F1F}
+
+.nav{display:flex;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:3px;margin-bottom:10px;gap:2px}
+.nav-btn{flex:1;text-align:center;padding:7px 2px;font-size:12px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;border-radius:9px}
+.nav-btn.on{background:var(--color-background-primary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary)}
+
+.pane{display:none}.pane.on{display:block}
+
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:10px}
+
+.type-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:14px}
+.type-btn{padding:10px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.type-btn.exp-on{background:#FCEBEB;color:#791F1F;border-color:#F09595}
+.type-btn.inc-on{background:#EAF3DE;color:#27500A;border-color:#97C459}
+
+.field{margin-bottom:11px}
+.lbl{display:block;font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px;letter-spacing:.02em}
+input,select{width:100%;padding:9px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);direction:rtl}
+input:focus,select:focus{outline:none;border-color:#3B6D11;border-width:1px}
+
+.row-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+
+.submit{width:100%;padding:12px;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;border:none;background:#1A6B3A;color:#EAF3DE;margin-top:2px;display:flex;align-items:center;justify-content:center;gap:7px}
+.submit:active{opacity:.85}
+
+.toast{text-align:center;font-size:12px;padding:7px;border-radius:var(--border-radius-md);margin-top:8px;background:#EAF3DE;color:#27500A;display:none}
+
+.entry{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.entry:last-child{border:none;padding-bottom:0}
+.entry-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ei-exp{background:#FCEBEB}.ei-inc{background:#EAF3DE}
+.ei-exp i{color:#A32D2D}.ei-inc i{color:#3B6D11}
+.e-info{flex:1;min-width:0}
+.e-desc{font-size:13px;font-weight:500;color:var(--color-text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.e-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.e-amt{font-size:13px;font-weight:500;white-space:nowrap}
+.e-del{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);padding:4px;font-size:15px;line-height:1;margin-right:-4px}
+.e-del:hover{color:#A32D2D}
+
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+
+.empty{text-align:center;padding:28px 0}
+.empty i{font-size:28px;color:var(--color-text-secondary);display:block;margin-bottom:8px}
+.empty p{font-size:13px;color:var(--color-text-secondary)}
+
+.bar-row{margin-bottom:12px}
+.bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.bar-name{font-size:13px;color:var(--color-text-primary)}
+.bar-right{display:flex;align-items:center;gap:8px}
+.bar-pct{font-size:11px;color:var(--color-text-secondary)}
+.bar-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.bar-bg{height:6px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:#3B6D11}
+
+.tips{font-size:11px;color:var(--color-text-secondary);text-align:center;padding:6px 0 2px;line-height:1.6}
+
+.log-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.log-head-t{font-size:12px;font-weight:500;color:var(--color-text-secondary)}
+.clr-btn{font-size:11px;color:var(--color-text-secondary);background:none;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px 10px;cursor:pointer}
+</style>
+
+<div class="app">
+
+  <div class="header">
+    <div class="header-top">
+      <span class="header-title">ميزانيتي</span>
+      <span class="month-pill" id="month-lbl"></span>
+    </div>
+    <div class="big-num" id="h-sav">0 ر.س</div>
+    <div class="big-sub" id="h-sub">صافي المدخرات</div>
+    <div class="meter-bg"><div class="meter-fill" id="h-meter" style="width:0%"></div></div>
+    <div class="two">
+      <div class="stat">
+        <div class="stat-l"><i class="ti ti-arrow-down-circle" style="font-size:13px" aria-hidden="true"></i> دخل</div>
+        <div class="stat-v inc-c" id="h-inc">0 ر.س</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l"><i class="ti ti-arrow-up-circle" style="font-size:13px" aria-hidden="true"></i> مصاريف</div>
+        <div class="stat-v exp-c" id="h-exp">0 ر.س</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn on" onclick="goTab('add')"><i class="ti ti-plus" style="font-size:13px" aria-hidden="true"></i> إضافة</div>
+    <div class="nav-btn" onclick="goTab('log')"><i class="ti ti-clock" style="font-size:13px" aria-hidden="true"></i> السجل</div>
+    <div class="nav-btn" onclick="goTab('cats')"><i class="ti ti-chart-donut" style="font-size:13px" aria-hidden="true"></i> الفئات</div>
+  </div>
+
+  <div class="pane on" id="p-add">
+    <div class="card">
+      <div class="type-row">
+        <div class="type-btn exp-on" id="tb-exp" onclick="setT('exp')">
+          <i class="ti ti-arrow-up" style="font-size:15px" aria-hidden="true"></i> مصروف
+        </div>
+        <div class="type-btn" id="tb-inc" onclick="setT('inc')">
+          <i class="ti ti-arrow-down" style="font-size:15px" aria-hidden="true"></i> دخل
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">المبلغ (ريال سعودي)</label>
+        <input type="number" id="f-amt" placeholder="0" min="0" step="1" inputmode="decimal">
+      </div>
+      <div class="field" id="g-exp">
+        <label class="lbl">الفئة</label>
+        <select id="f-cat">
+          <option value="">اختر...</option>
+          <option>السكن والإيجار</option>
+          <option>الطعام والمشتريات</option>
+          <option>المواصلات</option>
+          <option>الفواتير والخدمات</option>
+          <option>الصحة</option>
+          <option>الترفيه</option>
+          <option>التعليم</option>
+          <option>الملابس</option>
+          <option>الادخار والاستثمار</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+      <div class="field" id="g-inc" style="display:none">
+        <label class="lbl">المصدر</label>
+        <select id="f-src">
+          <option value="">اختر...</option>
+          <option>الراتب الأساسي</option>
+          <option>بدل سكن</option>
+          <option>بدل مواصلات</option>
+          <option>عمل حر</option>
+          <option>استثمار</option>
+          <option>هدية أو مكافأة</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">الوصف</label>
+        <input type="text" id="f-desc" placeholder="مثال: إيجار الشقة، بقالة...">
+      </div>
+      <div class="field">
+        <label class="lbl">التاريخ</label>
+        <input type="date" id="f-date">
+      </div>
+      <button class="submit" onclick="addEntry()">
+        <i class="ti ti-check" style="font-size:16px" aria-hidden="true"></i> حفظ
+      </button>
+      <div class="toast" id="toast">تم الحفظ بنجاح</div>
+    </div>
+    <div class="tips">البيانات محفوظة على جهازك تلقائياً</div>
+  </div>
+
+  <div class="pane" id="p-log">
+    <div class="card" style="padding:14px 16px">
+      <div class="log-head">
+        <span class="log-head-t">آخر العمليات</span>
+        <button class="clr-btn" onclick="clearAll()"><i class="ti ti-trash" style="font-size:12px" aria-hidden="true"></i> مسح الكل</button>
+      </div>
+      <div id="log-list"><div class="empty"><i class="ti ti-inbox" aria-hidden="true"></i><p>لا توجد عمليات بعد</p></div></div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-cats">
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:14px">المصاريف حسب الفئة</div>
+      <div id="cat-list"><div class="empty"><i class="ti ti-chart-donut" aria-hidden="true"></i><p>لا توجد مصاريف بعد</p></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var type='exp', data=[];
+try{data=JSON.parse(localStorage.getItem('bgt_v3')||'[]')}catch(e){data=[]}
+
+var months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+var d=new Date();
+document.getElementById('month-lbl').textContent=months[d.getMonth()]+' '+d.getFullYear();
+document.getElementById('f-date').value=d.toISOString().split('T')[0];
+
+function fmt(n){return Math.round(+n).toLocaleString('ar')+' ر.س'}
+
+function setT(t){
+  type=t;
+  document.getElementById('tb-exp').className='type-btn'+(t==='exp'?' exp-on':'');
+  document.getElementById('tb-inc').className='type-btn'+(t==='inc'?' inc-on':'');
+  document.getElementById('g-exp').style.display=t==='exp'?'block':'none';
+  document.getElementById('g-inc').style.display=t==='inc'?'block':'none';
+}
+
+function goTab(n){
+  ['add','log','cats'].forEach(function(k,i){
+    document.querySelectorAll('.nav-btn')[i].classList.toggle('on',k===n);
+    document.getElementById('p-'+k).classList.toggle('on',k===n);
+  });
+  if(n==='log')renderLog();
+  if(n==='cats')renderCats();
+}
+
+function persist(){try{localStorage.setItem('bgt_v3',JSON.stringify(data))}catch(e){}}
+
+function addEntry(){
+  var amt=parseFloat(document.getElementById('f-amt').value);
+  var cat=type==='exp'?document.getElementById('f-cat').value:document.getElementById('f-src').value;
+  var desc=document.getElementById('f-desc').value.trim();
+  var dt=document.getElementById('f-date').value;
+  if(!amt||amt<=0){alert('أدخل مبلغاً صحيحاً');return}
+  if(!cat){alert('اختر الفئة');return}
+  if(!desc){alert('أدخل وصفاً');return}
+  data.unshift({id:Date.now(),t:type,a:amt,c:cat,d:desc,dt:dt});
+  persist();renderHero();
+  document.getElementById('f-amt').value='';
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-cat').value='';
+  document.getElementById('f-src').value='';
+  var tk=document.getElementById('toast');
+  tk.style.display='block';
+  setTimeout(function(){tk.style.display='none'},1800);
+}
+
+function delEntry(id){data=data.filter(function(e){return e.id!==id});persist();renderHero();renderLog()}
+function clearAll(){if(confirm('مسح كل البيانات؟')){data=[];persist();renderHero();renderLog();renderCats()}}
+
+function totals(){
+  var inc=0,exp=0;
+  data.forEach(function(e){if(e.t==='inc')inc+=e.a;else exp+=e.a});
+  return{inc:inc,exp:exp}
+}
+
+function renderHero(){
+  var t=totals();
+  var sav=t.inc-t.exp;
+  document.getElementById('h-inc').textContent=fmt(t.inc);
+  document.getElementById('h-exp').textContent=fmt(t.exp);
+  var sv=document.getElementById('h-sav');
+  sv.textContent=fmt(Math.abs(sav));
+  sv.style.color=sav<0?'#791F1F':'var(--color-text-primary)';
+  document.getElementById('h-sub').textContent=sav<0?'عجز في الميزانية':sav===0?'صافي المدخرات':'صافي المدخرات';
+  var pct=t.inc>0?Math.min(Math.round(t.exp/t.inc*100),100):0;
+  var m=document.getElementById('h-meter');
+  m.style.width=pct+'%';
+  m.className='meter-fill'+(pct>=100?' over':'');
+}
+
+function catIcon(c){
+  var map={'السكن والإيجار':'ti-home','الطعام والمشتريات':'ti-shopping-cart','المواصلات':'ti-car','الفواتير والخدمات':'ti-bolt','الصحة':'ti-heart','الترفيه':'ti-device-tv','التعليم':'ti-book','الملابس':'ti-shirt','الادخار والاستثمار':'ti-pig-money','الراتب الأساسي':'ti-briefcase','بدل سكن':'ti-building','بدل مواصلات':'ti-bus','عمل حر':'ti-laptop','استثمار':'ti-chart-line','هدية أو مكافأة':'ti-gift'};
+  return map[c]||'ti-circle-dot';
+}
+
+function renderLog(){
+  var el=document.getElementById('log-list');
+  if(!data.length){el.innerHTML='<div class="empty"><i class="ti ti-inbox" aria-hidden="true"></i><p>لا توجد عمليات بعد</p></div>';return}
+  el.innerHTML=data.slice(0,60).map(function(e){
+    var isI=e.t==='inc';
+    return '<div class="entry">'+
+      '<div class="entry-icon '+(isI?'ei-inc':'ei-exp')+'"><i class="ti '+catIcon(e.c)+'" aria-hidden="true"></i></div>'+
+      '<div class="e-info">'+
+        '<div class="e-desc">'+e.d+'</div>'+
+        '<div class="e-meta">'+e.dt+' · <span class="pill">'+e.c+'</span></div>'+
+      '</div>'+
+      '<span class="e-amt" style="color:'+(isI?'#3B6D11':'#A32D2D')+'">'+(isI?'+':'-')+fmt(e.a)+'</span>'+
+      '<button class="e-del" onclick="delEntry('+e.id+')" aria-label="حذف"><i class="ti ti-x" aria-hidden="true"></i></button>'+
+    '</div>'
+  }).join('');
+}
+
+function renderCats(){
+  var el=document.getElementById('cat-list');
+  var cats={},total=0;
+  data.filter(function(e){return e.t==='exp'}).forEach(function(e){cats[e.c]=(cats[e.c]||0)+e.a;total+=e.a});
+  var keys=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a]});
+  if(!keys.length){el.innerHTML='<div class="empty"><i class="ti ti-chart-donut" aria-hidden="true"></i><p>لا توجد مصاريف بعد</p></div>';return}
+  el.innerHTML=keys.map(function(k){
+    var pct=total>0?Math.round(cats[k]/total*100):0;
+    return '<div class="bar-row">'+
+      '<div class="bar-top">'+
+        '<span class="bar-name"><i class="ti '+catIcon(k)+'" style="font-size:13px;vertical-align:-1px;margin-left:5px" aria-hidden="true"></i>'+k+'</span>'+
+        '<div class="bar-right"><span class="bar-pct">'+pct+'%</span><span class="bar-val">'+fmt(cats[k])+'</span></div>'+
+      '</div>'+
+      '<div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%"></div></div>'+
+    '</div>'
+  }).join('');
+}
+
+renderHero();
+</script>
