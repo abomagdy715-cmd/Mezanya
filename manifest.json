@@ -1,6 +1,6 @@
 {
-  "name": "ميزانيتي",
-  "short_name": "ميزانيتي",
+  "name": "Mezanya",
+  "short_name": "Mezanya",
   "description": "تطبيق تتبع الميزانية الشخصية",
   "start_url": "/Mezanya/",
   "display": "standalone",
